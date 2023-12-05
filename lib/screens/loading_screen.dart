@@ -1,12 +1,10 @@
-import 'dart:async';
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_app/datas/network.dart';
 import 'package:flutter_weather_app/datas/get_location.dart';
 import 'package:flutter_weather_app/screens/weather_screen.dart';
+import 'package:flutter_weather_app/widgets/loading_widget.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 String apiKey = dotenv.get('API_KEY');
@@ -19,25 +17,10 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
   late Position myCurrentPosition;
-  int _currentIndex = 0;
-  List<String> _imageList = [
-    'assets/svg/Thermometer.svg',
-    'assets/svg/Thermometer-Zero.svg',
-    'assets/svg/Thermometer-25.svg',
-    'assets/svg/Thermometer-50.svg',
-    'assets/svg/Thermometer-75.svg',
-    'assets/svg/Thermometer-100.svg',
-  ];
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer.periodic(Duration(milliseconds: 150), (Timer timer) {
-      setState(() {
-        _currentIndex = (_currentIndex + 1) % _imageList.length;
-      });
-    });
     getLocation();
   }
 
@@ -105,16 +88,7 @@ class _LoadingState extends State<Loading> {
                           ),
                         ),
                       ),
-                      Opacity(
-                        opacity: 0.54,
-                        child: SvgPicture.asset(
-                          _imageList[_currentIndex],
-                          width: 200,
-                          height: 200,
-                          colorFilter:
-                              ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                        ),
-                      ),
+                      Opacity(opacity: 0.54, child: LoadingWidget()),
                     ],
                   ),
                   SizedBox(
